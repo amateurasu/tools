@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -15,13 +15,13 @@
         }
 
         td, th {
-            border: 1px solid #dddddd;
+            border: 1px solid #CCCCCC;
             text-align: left;
             padding: 8px;
         }
 
         tr:nth-child(even) {
-            background-color: #dddddd;
+            background-color: #EEEEEEEE;
         }
     </style>
 </head>
@@ -42,14 +42,25 @@
         <td id="dw"></td>
         <td id="dh"></td>
     </tr>
+    <tr>
+        <td>HTML</td>
+        <td id="hw"></td>
+        <td id="hh"></td>
+    </tr>
 </table>
 <script src="../assets/js/jquery-3.3.1.min.js"></script>
 <script>
+    var $window = $(window);
+    var $document = $(document);
+    var $html = $("html");
+
     function screenSize() {
-        $("#ww").html($(window).width());
-        $("#wh").html($(window).height());
-        $("#dw").html($(document).width());
-        $("#dh").html($(document).height());
+        $("#ww").html($window.width());
+        $("#wh").html($window.height());
+        $("#dw").html($document.width());
+        $("#dh").html($document.height());
+        $("#hw").html($html.width());
+        $("#hh").html($html.height());
     }
 
     screenSize();
