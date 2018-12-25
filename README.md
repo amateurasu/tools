@@ -6,4 +6,4 @@ The encoding and decoding tools for Binary, Hex, Base 64, URI, Unicode and so on
 ## Utils
 A swiss-army knife providing many tools.
 
-1. [Size measurement](./utils/)
+1. [Size measurement](./utils/size.html)
