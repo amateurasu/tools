@@ -1,0 +1,681 @@
+/*region General*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    -webkit-transition: background-color .5s;
+    -moz-transition: background-color .5s;
+    transition: background-color .5s;
+    font-family: Segoe UI, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: #fafafa;
+}
+
+h1 {
+    font-size: 1.5em;
+    text-align: center;
+    padding: 30px 0 10px 0;
+}
+
+/*endregion*/
+
+/*region Side Navigation Bar */
+.side-nav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 60px;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    transition: all 0.5s;
+    z-index: 10;
+}
+
+.side-nav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    overflow-x: hidden;
+    -webkit-transition: 0.5s;
+    -moz-transition: 0.5s;
+    transition: 0.5s;
+}
+
+.side-nav a:hover {
+    color: #f1f1f1;
+}
+
+.side-nav > .close-nav {
+    top: 0;
+    position: absolute;
+    margin: 15px;
+    font-size: 35px;
+    float: right;
+    cursor: pointer;
+}
+
+.open-nav {
+    padding: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    position: absolute;
+    z-index: 2;
+    -webkit-transition: 0.5s;
+    -moz-transition: 0.5s;
+    transition: 0.5s;
+}
+
+.nav-show {
+    width: 75vw;
+}
+
+.overlay {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: all 0.5s;
+}
+
+.ed {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);
+}
+
+/*endregion*/
+
+/*region Encode & Decode Area */
+.container {
+    position: relative;
+    -webkit-transition: margin-left .5s;
+    -moz-transition: margin-left .5s;
+    transition: margin-left .5s;
+}
+
+.txt {
+    height: 30vh;
+    min-height: 200px;
+    border: none;
+    resize: none;
+    width: 100%;
+    padding: 15px 35px 35px 15px;
+    font-size: 16px;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    transition: all 0.5s;
+    overflow: visible;
+}
+
+.txt:focus {
+    outline: none;
+}
+
+.div-input {
+    background: #FFFFFF;
+}
+
+.input {
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+.div-output {
+    background: #eeeeeeee;
+    border-radius: 0 0 10px 10px;
+}
+
+.output {
+    background-color: #eeeeeeee;
+    border-radius: 0 0 10px 10px;
+}
+
+.crypt {
+    height: 36px;
+}
+
+.crypt > a {
+    float: left;
+    color: #666666;
+    text-align: center;
+    padding: 7px 20px;
+    text-decoration: none;
+    font-size: 14px;
+    border-bottom: 3px solid transparent;
+    overflow: hidden;
+    font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#encrypt > *:first-child {
+    border-radius: 10px 0 0 0;
+}
+
+#decrypt > *:last-child {
+    border-radius: 0 10px 0 0;
+}
+
+.crypt a:not(.choose_crypt) {
+    width: 100%;
+}
+
+.crypt a.active {
+    color: #4181f1;
+    background-color: #00000000;
+    border-bottom: 3px solid #00000000;
+}
+
+.crypt a:hover {
+    border-bottom: 3px solid #4285f4;
+    background-color: #DDDDDDDD;
+}
+
+.crypt .choose_crypt::after {
+    padding: 4px 10px;
+    content: '';
+}
+
+.hidden, .crypt a:not(.active) {
+    display: none;
+}
+
+#en-detect {
+    color: #438dff;
+}
+
+/*endregion*/
+
+/*region Groups */
+.group > * {
+    font-size: 16px;
+    padding: 6px 20px;
+    float: left;
+    resize: none;
+}
+
+.group-upper {
+    background: #fafafa;
+    border-bottom: 1px solid #AAAAAACC;
+    border-radius: 10px 10px 0 0;
+}
+
+.group-upper > * {
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.no-select, .group-upper > * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.group-upper > *, .group-under > * {
+    margin: 0;
+    padding: 0;
+}
+
+.group::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.btn {
+    color: #777777;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-group button:hover {
+    background-color: #3e8e41;
+}
+
+/*endregion*/
+
+/*region Alert */
+.alert {
+    padding: 10px 20px;
+    background-color: #ff5555;
+    border-left: 5px solid #ff0000;
+    color: white;
+    margin: 0;
+    overflow: hidden;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.btn-close {
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 30px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.5s;
+    right: 100px;
+    margin: auto;
+}
+
+.btn-close:hover {
+    color: black;
+}
+
+/*endregion*/
+
+/*region Utils */
+.float {
+    position: absolute;
+    z-index: 2;
+}
+
+.right {
+    float: right;
+}
+
+.top-left {
+    top: 17px;
+    left: 17px;
+}
+
+.top-right {
+    top: 17px;
+    right: 17px;
+}
+
+.bottom-left {
+    bottom: 17px;
+    left: 17px;
+}
+
+.bottom-right {
+    bottom: 17px;
+    right: 17px;
+}
+
+/*endregion*/
+
+/*region Icon */
+.icon, .a-icon::after {
+    opacity: 0.5;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    cursor: pointer;
+    margin: auto;
+    background: url('../assets/img/1x_mobile.png') no-repeat;
+}
+
+.a-icon::after {
+    background-position-x: 50%;
+}
+
+.icon:hover, .right-arrow {
+    opacity: 1;
+    background-color: #99999999;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+}
+
+.right-arrow, .a-right-arrow::after {
+    background-position-y: -72px;
+}
+
+.right-arrow:hover {
+    background-color: #00990099;
+}
+
+.swap, .a-swap::after {
+    background-position-y: -48px;
+}
+
+.copy, .a-copy::after {
+    background: url('../assets/img/copy_black_24dp.png') no-repeat;
+}
+
+.copy:hover {
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}
+
+.down, .a-down::after {
+    background-position-y: -216px;
+}
+
+.cross, .a-cross::after {
+    background-position-y: -192px;
+}
+
+#swap {
+    margin: 6px auto;
+    display: block;
+}
+
+/*endregion*/
+
+/*region Dropdown */
+.dropdown {
+    position: absolute;
+    z-index: 2;
+    top: 10px;
+}
+
+.search {
+    border: 0;
+    font-size: 16px;
+    width: 100%;
+}
+
+/*endregion*/
+
+/*region Responsive */
+/*region For mobile phones: */
+[class*="col"] {
+    width: 100%;
+    position: relative;
+    display: block;
+}
+
+@media only screen and (min-width: 320px) {
+    /*region column*/
+    .col-s-1 {
+        width: 8.33%;
+    }
+
+    .col-s-2 {
+        width: 16.66%;
+    }
+
+    .col-s-3 {
+        width: 25%;
+    }
+
+    .col-s-4 {
+        width: 33.33%;
+    }
+
+    .col-s-5 {
+        width: 41.66%;
+    }
+
+    .col-s-6 {
+        width: 50%;
+    }
+
+    .col-s-7 {
+        width: 58.33%;
+    }
+
+    .col-s-8 {
+        width: 66.66%;
+    }
+
+    .col-s-9 {
+        width: 75%;
+    }
+
+    .col-s-10 {
+        width: 83.33%;
+    }
+
+    .col-s-11 {
+        width: 91.66%;
+    }
+
+    .col-s-12 {
+        width: 100%;
+    }
+
+    /*endregion*/
+}
+
+/*endregion*/
+
+@media only screen and (min-width: 500px) {
+    .choose_crypt {
+        display: block;
+    }
+
+}
+
+/*region For tablets */
+@media only screen and (min-width: 768px) {
+    /*region column*/
+    .col-m-1 {
+        width: 8.33%;
+    }
+
+    .col-m-2 {
+        width: 16.66%;
+    }
+
+    .col-m-3 {
+        width: 25%;
+    }
+
+    .col-m-4 {
+        width: 33.33%;
+    }
+
+    .col-m-5 {
+        width: 41.66%;
+    }
+
+    .col-m-6 {
+        width: 50%;
+    }
+
+    .col-m-7 {
+        width: 58.33%;
+    }
+
+    .col-m-8 {
+        width: 66.66%;
+    }
+
+    .col-m-9 {
+        width: 75%;
+    }
+
+    .col-m-10 {
+        width: 83.33%;
+    }
+
+    .col-m-11 {
+        width: 91.66%;
+    }
+
+    .col-m-12 {
+        width: 100%;
+    }
+
+    /*endregion*/
+    h1 {
+        font-size: 2em;
+    }
+
+    .nav-show {
+        width: 60vw;
+    }
+
+    .crypt a.active {
+        background-color: #EEEEEE;
+        border-bottom: 3px solid #4181f1;
+    }
+
+    .crypt a:not(.active) {
+        display: block;
+    }
+
+    .crypt a:not(.choose_crypt) {
+        width: auto;
+    }
+}
+
+/*endregion*/
+
+/*region For desktop: */
+@media only screen and (min-width: 1024px) {
+    /*region columns*/
+    .col-1 {
+        width: 8.33%;
+    }
+
+    .col-2 {
+        width: 16.66%;
+    }
+
+    .col-3 {
+        width: 25%;
+    }
+
+    .col-4 {
+        width: 33.33%;
+    }
+
+    .col-5 {
+        width: 41.66%;
+    }
+
+    .col-6 {
+        width: 50%;
+    }
+
+    .col-7 {
+        width: 58.33%;
+    }
+
+    .col-8 {
+        width: 66.66%;
+    }
+
+    .col-9 {
+        width: 75%;
+    }
+
+    .col-10 {
+        width: 83.33%;
+    }
+
+    .col-11 {
+        width: 91.66%;
+    }
+
+    .col-12 {
+        width: 100%;
+    }
+
+    /*endregion*/
+    .txt {
+        height: 40vh;
+        min-height: 250px;
+    }
+
+    .div-input {
+        border-radius: 0 0 0 10px;
+    }
+
+    .div-output {
+        border-radius: 0 0 10px 0;
+    }
+
+    .input {
+        border-radius: 0 0 0 10px;
+    }
+
+    .output {
+        border-radius: 0 0 10px 0;
+    }
+
+    .nav-show {
+        width: 25vw;
+    }
+
+    .off-canvas {
+        margin-left: 25vw
+    }
+
+
+    /*region Experimental */
+    #info a {
+        text-align: right;
+        position: absolute;
+        right: 0;
+        transition: 0.5s;
+        padding: 15px 50px;
+        width: 50px;
+        text-decoration: none;
+        font-size: 20px;
+        color: white;
+        border-radius: 5px 0 0 5px;
+    }
+
+    #info a:hover {
+        width: 200px;
+    }
+
+    #about {
+        bottom: 290px;
+        background-color: #4CAF50;
+    }
+
+    #blog {
+        bottom: 110px;
+        background-color: #2196F3;
+    }
+
+    #projects {
+        bottom: 170px;
+        background-color: #f44336;
+    }
+
+    #contact {
+        bottom: 230px;
+        background-color: #555555
+    }
+
+    /*endregion*/
+}
+
+/*endregion*/
+
+/*region Super large*/
+@media only screen and (min-width: 1920px) {
+    .ed {
+        width: 90%;
+        max-width: 1800px;
+    }
+}
+
+/*endregion*/
+/*endregion*/
