@@ -161,10 +161,10 @@
             ed.div.html("").append($("<a>", {
                 id: `${ed.prefix}choose`, "class": `choose_crypt a-icon a-down`
             }).click(showCryptTable));
+
             if (ed === encode) {
-                const ele = $("<a>", {id: "en_detect", "class": "active crypt_detect"})
-                    .text("AUTO DETECT").on("click", changeDetect);
-                ed.div.append(ele);
+                ed.div.append($("<a>", {id: "en_detect", "class": "active crypt_detect"})
+                    .text("AUTO DETECT").on("click", changeDetect));
             }
             ed.list.forEach(id => {
                 let element = $("<a>", {id: ed.prefix + id, "class": `crypt_${id}`})
@@ -224,7 +224,7 @@
 
         const changeDetect = e => {
             event(e);
-            if ($(w).width() < 768) return showCryptTable();
+            if ($(w).width() < 768) return showCryptTable(e);
             encode.autoDetect = !0;
             encode.div.find(".active").removeClass("active");
             $("#en_detect").addClass("active").css({"color": "#2572EB"});
@@ -233,7 +233,7 @@
 
         const changeCrypt = e => {
             event(e);
-            if ($(w).width() < 768) return showCryptTable();
+            if ($(w).width() < 768) return showCryptTable(e);
             let [ed, id] = e.target.id.split("_");
             if (ed === "en") {
                 ed = encode;
@@ -260,7 +260,7 @@
         const initializeDrop = (dom, list) => {
             dom.html("");
             list.forEach(e => dom.append($(`<li>`, {id: `choice_${e}`, "class": "choice col-m-4 col-3"})
-                    .text(core[e].name).click(makeChoiceCrypt)));
+                .text(core[e].name).click(makeChoiceCrypt)));
         };
 
         const makeChoiceCrypt = e => resetCrypt(drop.ed === "en" ? encode : decode, e.target.id.substr(7));
