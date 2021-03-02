@@ -14,6 +14,83 @@ function ED() {
 
     const isUrl = input => /^((https?|ftp):\/\/)?\w+([\-.]\w+)*\.[a-z0-9]{2,5}(:[0-9]{1,5})?(\/.*)?$/i.test(input);
 
+    const fromChar = (c, value) => {
+        const code = c.charCodeAt(0);
+        switch (c) {
+            case "0":
+            case "1":
+            case "2":
+            case "3":
+            case "4":
+            case "5":
+            case "6":
+            case "7":
+            case "8":
+            case "9":
+                return (value << 4) + code - 48;
+            case "a":
+            case "b":
+            case "c":
+            case "d":
+            case "e":
+            case "f":
+                return (value << 4) + code - 87;
+            case "A":
+            case "B":
+            case "C":
+            case "D":
+            case "E":
+            case "F":
+                return (value << 4) + code - 55;
+            default:
+                throw "Malformed \\uXXXX encoding.";
+        }
+    };
+
+    const fromUnicode = (input, offset) => {
+        let value = 0;
+        for (let i = 0; i < 4; i++) {
+            value = fromChar(input.charAt(offset++), value);
+        }
+        return value;
+    };
+
+    const unescape = c => {
+        switch (c) {
+            case "t":
+                return "\t";
+            case "r":
+                return "\r";
+            case "n":
+                return "\n";
+            case "f":
+                return "\f";
+        }
+        return "";
+    };
+
+    const escape = (code, char) => {
+        switch (code) {
+            case " ":
+                return " ";
+            case "\t":
+                return "\\t";
+            case "\n":
+                return "\\n";
+            case "\r":
+                return "\\r";
+            case "\f":
+                return "\\f";
+            case "=":
+            case ":":
+            case "#":
+            case "!":
+                return "\\" + char;
+            default:
+                return code < 0x0020 || code > 0x007e ? `\\u${code.toString(16).toUpperCase().padStart(4, "0")}` : char;
+        }
+    };
+
     const core = {
         bin: {
             id: "bin",
@@ -26,7 +103,7 @@ function ED() {
                     output += input.charCodeAt(i).toString(2).padStart(8, "0");
                 }
                 return output;
-            },
+            }
         },
 
         hex: {
@@ -39,9 +116,8 @@ function ED() {
                 for (let i = 0; i < s.length; i++) {
                     str += String.fromCharCode(parseInt(s[i], 16));
                 }
-                const esc = escape || encodeURIComponent;
                 try {
-                    return decodeURIComponent(esc(str));
+                    return decodeURIComponent(encodeURIComponent(str));
                 } catch (e) {
                     return null;
                 }
@@ -53,7 +129,7 @@ function ED() {
                     result += input.charCodeAt(i).toString(16);
                 }
                 return result.toUpperCase();
-            },
+            }
         },
 
         b64: {
@@ -72,10 +148,7 @@ function ED() {
                     return null;
                 }
             },
-            encode: input =>
-                btoa(
-                    encodeURIComponent(input).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode(`0x${p1}`))
-                ),
+            encode: input => btoa(encodeURIComponent(input).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode(`0x${p1}`)))
         },
 
         uri: {
@@ -83,7 +156,7 @@ function ED() {
             name: "URI",
             valid: input => uriDecode(input) !== null,
             decode: uriDecode,
-            encode: input => encodeURIComponent(input).replace(/'/g, "%27").replace(/"/g, "%22"),
+            encode: input => encodeURIComponent(input).replace(/'/g, "%27").replace(/"/g, "%22")
         },
 
         uni: {
@@ -91,122 +164,35 @@ function ED() {
             name: "Unicode",
             valid: input => /^(?:(?:\\u[0-9a-fA-F]{4}|\w)?[ !'#$%&"()*+-.,\/\\:;<=>?@[\]^_`{|}~]?)*$/g.test(input),
             decode: input => {
-                const fromCode = (c, value) => {
-                    switch (c) {
-                        case "0":
-                        case "1":
-                        case "2":
-                        case "3":
-                        case "4":
-                        case "5":
-                        case "6":
-                        case "7":
-                        case "8":
-                        case "9":
-                            return (value << 4) + code - 48;
-                        case "a":
-                        case "b":
-                        case "c":
-                        case "d":
-                        case "e":
-                        case "f":
-                            return (value << 4) + code - 87;
-                        case "A":
-                        case "B":
-                        case "C":
-                        case "D":
-                        case "E":
-                        case "F":
-                            return (value << 4) + code - 55;
-                        default:
-                            throw "Malformed \\uXXXX encoding.";
-                    }
-                };
-
-                const fromUnicode = (input, offset) => {
-                    let value = 0;
-                    for (let i = 0; i < 4; i++) {
-                        c = input.charAt(offset++);
-                        let code = c.charCodeAt(0);
-                        value = fromCode(c, value);
-                    }
-                    return value;
-                };
-
-                const unesc = c => {
-                    switch (c) {
-                        case "t":
-                            return "\t";
-                        case "r":
-                            return "\r";
-                        case "n":
-                            return "\n";
-                        case "f":
-                            return "\f";
-                    }
-                    return "";
-                };
-
                 const len = input.length;
                 let offset = 0;
                 let out = "";
                 while (offset < len) {
                     let c = input.charAt(offset++);
-                    if (c !== "\\") {
+                    if (c === "\\") {
+                        c = input.charAt(offset++);
+                        out += c === "u" ? String.fromCharCode(fromUnicode(input, offset)) : unescape(c);
+                    } else {
                         out += c;
-                        continue;
                     }
-                    c = input.charAt(offset++);
-                    out += c === "u" ? String.fromCharCode(fromUnicode(input, offset)) : unesc(c);
                 }
                 return out;
             },
             encode: input => {
-                const esc = code => {
-                    const pad = "0000";
-                    switch (code) {
-                        case " ":
-                            return " ";
-                        case "\t":
-                            return "\\t";
-                        case "\n":
-                            return "\\n";
-                        case "\r":
-                            return "\\r";
-                        case "\f":
-                            return "\\f";
-                        case "=":
-                        case ":":
-                        case "#":
-                        case "!":
-                            return "\\" + char;
-                        default:
-                            if (code < 0x0020 || code > 0x007e) {
-                                const s = code.toString(16).toUpperCase();
-                                return "\\u" + s.padStart(4, "0");
-                            } else {
-                                return char;
-                            }
-                    }
-                };
                 let sb = "";
                 try {
                     const len = input.length;
                     for (let i = 0; i < len; i++) {
                         const code = input.charCodeAt(i);
                         const char = input.charAt(i);
-                        if (code > 61 && code < 127) {
-                            sb += code === "\\" ? "\\\\" : char;
-                        } else {
-                            sb += esc(code);
-                        }
+                        sb += code > 61 && code < 127 ? (code === "\\" ? "\\\\" : char) : escape(code, char);
                     }
                 } catch (e) {}
                 return sb;
-            },
+            }
         },
 
-        txt: {id: "txt", name: "Text", valid: () => true, decode: input => input, encode: input => input},
+        txt: {id: "txt", name: "Text", valid: () => true, decode: input => input, encode: input => input}
     };
 
     const detect = (input, from) => {
@@ -218,16 +204,15 @@ function ED() {
 
     const tokenize = function* (input) {
         const length = input.length - 1;
-        const isWhitespace = s => s === " " || s === "\t" || s === "\n";
         const nextNonWhitespace = start => {
-            for (var i = start; i < length; i++) {
-                if (!isWhitespace(input.charAt(i))) return i;
+            for (let i = start; i < length; i++) {
+                if (!/\s/.test(input.charAt(i))) return i;
             }
             return -1;
         };
-        var index = nextNonWhitespace(0);
-        for (var i = index; i <= length; i++) {
-            if (isWhitespace(input.charAt(i))) {
+        let index = nextNonWhitespace(0);
+        for (let i = index; i <= length; i++) {
+            if (/\s/.test(input.charAt(i))) {
                 const substr = input.substring(index, i);
                 index = nextNonWhitespace(i);
                 yield substr;
@@ -242,8 +227,7 @@ function ED() {
             const type = order[index++];
             const decoded = core[type].decode(str);
             if (decoded) {
-                console.log(`'${str}' -> {${type}, '${decoded}'}`);
-                return {type, value: decoded, url: isUrl(decoded)};
+                return {type, escape: core.uni.encode(decoded), value: decoded, url: isUrl(decodeURIComponent(decoded))};
             }
         }
     };
@@ -254,21 +238,18 @@ function ED() {
         const result = [];
         for (const token of tokenize(input)) {
             let current = detect(token);
-
             if (previous) {
                 if (previous.index === current.index) {
                     buffer.push(token);
                     previous = current;
                     continue;
                 }
-
                 result.push(tryDecode(buffer, previous.index));
             }
             buffer = [token];
             previous = current;
         }
         result.push(tryDecode(buffer, previous.index));
-
         return result;
     };
 
@@ -277,20 +258,11 @@ function ED() {
             return auto(input);
         }
         const decoder = core[type];
-        return !decoder.valid((input = input.trim())) ? null : decoder.decode(input);
+        const decoded = !decoder.valid((input = input.trim())) ? null : decoder.decode(input);
+        return [{type, value: decoded, url: isUrl(decoded)}];
     };
 
-    const encode = (input, type) => core[type].encode(input.trim());
+    const encode = (input, type) => [{type, value: core[type].encode(input.trim())}];
 
-    return {order, encode, decode, tokenize, ...core};
+    return {order, encode, decode, ...core};
 }
-
-console.log(ED().decode(`01101000 01110100 01110100 01110000 01110011 00111010 00101111 00101111 01100110 01100010 \
-00101110 01100011 01101111 01101101 Một đoạn text bằng tiếng Việt 4C C3 AA 20 4D 69 6E 68 20 C4 90 E1 BB A9 63 TMOq \
-https%3A%2F%2Ffb.com aHR0cHM6Ly9mYi5jb20=`));
-
-console.log(ED().encode("https://fb.com", "bin"))
-console.log(ED().encode("https://fb.com", "b64"))
-console.log(ED().encode("https://fb.com", "hex"))
-console.log(ED().encode("https://fb.com", "uri"))
-console.log(ED().encode("https://fb.com", "uni"))
