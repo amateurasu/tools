@@ -20,7 +20,11 @@ function ED() {
             de: input => split(input, 8).reduce((e, a) => a + String.fromCharCode(parseInt(e, 2)), ""),
             en: input => {
                 let output = "";
+<<<<<<< HEAD
                 for (let i in input) {
+=======
+                for (let i = 0; i < input.length; i++) {
+>>>>>>> 95217cb9e01893a2fbfd0f75588caee134960d65
                     output += input[i].charCodeAt(0).toString(2).padStart(8, '0');
                 }
                 return output;
@@ -228,8 +232,13 @@ let buffer = []
 const order = ["bin", "hex", "b64", "uri", "uni", "vie", "txt"];
 for (const i of iter) {
     let current = '';
+<<<<<<< HEAD
     for (let method in order) {
         const c = ed[order[method]];
+=======
+    for (let method of order) {
+        const c = ed[method];
+>>>>>>> 95217cb9e01893a2fbfd0f75588caee134960d65
         if (c.valid(i)) {
             current = method
             break;
@@ -240,12 +249,21 @@ for (const i of iter) {
     } else {
         if (previous) {
             const s = buffer.join(' ');
+<<<<<<< HEAD
             let decoded = ed[order[previous]].de(s);
             if (decoded == null) {
                 decoded = ed[order[++previous]].de(s);
             }
             
             console.log(`${previous} ${s} -> ${decoded}`);
+=======
+            const decoded = ed[previous].de(s);
+            if (decoded == null) {
+
+            } else {
+                console.log(`${previous} ${s} -> ${decoded}`);
+            }
+>>>>>>> 95217cb9e01893a2fbfd0f75588caee134960d65
         }
         buffer = [i]
     }
@@ -253,4 +271,8 @@ for (const i of iter) {
 }
 
 const val = buffer.join(' ');
+<<<<<<< HEAD
 console.log(`${order[previous]} ${val} -> ${ed[order[previous]].de(val)}`);
+=======
+console.log(`${previous} ${val} -> ${ed[previous].de(val)}`);
+>>>>>>> 95217cb9e01893a2fbfd0f75588caee134960d65

@@ -324,8 +324,12 @@ h1, h3, .choice, .no-select, .group-upper > * {
 }
 
 .middle-center {
+<<<<<<< HEAD
     left: calc(50vw - 12px);
     top: calc(35vh + 85px);
+=======
+    left: 50vw;
+>>>>>>> 95217cb9e01893a2fbfd0f75588caee134960d65
     margin: -12px 0 0 -12px;
 }
 
