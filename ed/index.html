@@ -5,21 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../assets/img/favicon.ico" rel="shortcut icon">
-    <link href="./style.css" rel="stylesheet">
+    <link rel="stylesheet" href="./frame.css">
+    <link rel="stylesheet" href="./index.css">
     <title>Encode &amp; Decode</title>
 </head>
 
 <body>
 <!--region HTML-->
-<div id="side-nav" class="side-nav">
+<nav id="side-nav" class="side-nav">
     <a class="close-nav no-select">&times;</a>
-    <a href="javascript:(function(a,b){let c=(a,b)=>(-1===a.search(' ')?a.match(new RegExp(`.{${b}}`,'g')):a.split(' '))||[a],d={valid:a=>null!==d.de(a),validUrl:a=>/^((https?|ftp):\/\/)?\w+([\-.]\w+)*\.[a-z0-9]{2,5}(:[0-9]{1,5})?(\/.*)?$/i.test(a),de:a=>{try{return decodeURIComponent(a.replace(/\+/g,' '))}catch(a){return null}}},e=(a,b)=>{if(b=b.trim(),!a.valid(b))return null;let c=a.de(b);return c=d.valid(c)?d.de(c):c,c};const f=a=>{const c=b.createElement('textarea');c.value=a,c.setAttribute('readonly',''),c.style.position='absolute',c.style.left='-9999px',b.body.appendChild(c);const d=!!(0<b.getSelection().rangeCount)&&b.getSelection().getRangeAt(0);c.select(),b.execCommand('copy'),b.body.removeChild(c),d&&(b.getSelection().removeAllRanges(),b.getSelection().addRange(d))};let g=(()=>{const c=b.activeElement,d=c?c.tagName.toLowerCase():null;return'textarea'===d||'input'===d&&/^(?:text|search|password|tel|url)$/i.test(c.type)&&'number'==typeof c.selectionStart?c.value.slice(c.selectionStart,c.selectionEnd):a.getSelection?a.getSelection().toString():''})(),h=''===g?'':e({valid:a=>/^(?:[01]{1,8}\s*)+$/.test(a.replace(/\s/g,'')),de:a=>{const b=c(a,8);let d='';for(let c=0;c<b.length;c++)d+=String.fromCharCode(parseInt(b[c],2));return d}},g)||e({valid:a=>/^(?:[0-9A-Fa-f]{2}\s*)+$/.test(a),de:b=>{const d=c(b,2);let e='';for(let a=0;a<d.length;a++)e+=String.fromCharCode(parseInt(d[a],16));let f=a.escape||encodeURIComponent;try{return decodeURIComponent(f(e))}catch(a){return null}}},g)||e({valid:a=>/^([\w+\/]{4})*([\w+\/]{4}|[\w+\/]{3}=|[\w\/]{2}==)$/.test(a.replace(/\s/g,'')),de:a=>{try{return decodeURIComponent(atob(a).split('').map(a=>'%'+('00'+a.charCodeAt(0).toString(16)).slice(-2)).join(''))}catch(a){return null}}},g)||e(d,g);(a=>{if(a){let b=a.replace(/\s/g,'');d.validUrl(b)?(!b.startsWith('http')&&(b='http://'+b),window.open(b,'_blank')):f(a)}})(h)})(window,document);" class="no-select">Suprise, madafaka?</a>
-</div>
+    <a href="" class="no-select">Suprise, madafaka?</a>
+</nav>
 
-<div id="container" class="container">
-    <span class="open-nav no-select">&#9776;</span>
+<main id="container" class="container">
+    <i class="btn open-nav float icon middle-center cross"></i>
     <div class="overlay hidden"></div>
     <h1>Encode &amp; Decode</h1>
+
     <div class="ed">
         <div class="group group-upper">
             <div id="encrypt" class="group crypt col-5 col-s-5"></div>
@@ -35,12 +37,8 @@
                 <i id="clear" class="btn float top-right icon cross hidden"></i>
             </div>
 
-            <i class="btn float icon cross"></i>
-<<<<<<< HEAD
-            <i class="btn float icon copy middle-center"></i>
-=======
-            <i class="btn float middle-center icon copy"></i>
->>>>>>> 95217cb9e01893a2fbfd0f75588caee134960d65
+            <i class="btn float icon middle-center cross"></i>
+            <i class="btn float icon middle-center copy"></i>
 
             <div class="div-output col-6 col-m-6">
                 <div id="output" class="txt output" title="output"></div>
@@ -62,11 +60,12 @@
             </div>
         </div>
     </div>
-    <div id="notify" class="alert hidden">
+    <section id="notify" class="alert hidden">
         <span class="btn-close no-select">&times;</span>
         <p id="msg-content"></p>
-    </div>
-</div>
+    </section>
+</main>
+
 <footer id="info" class="info group">
     <a class="about" href="../info/#about">About</a>
     <a class="blog" href="../info/#blog">Blog</a>
