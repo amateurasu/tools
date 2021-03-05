@@ -1,6 +1,6 @@
 "use strict";
 ((d, w, core) => {
-    //region declare
+    //#region declare
     const input = $("#input");
     const output = $("#output");
     const btn = {
@@ -39,9 +39,9 @@
         ed: "",
         init: !1
     };
-    //endregion declare
+    //#endregion declare
 
-    // region translating
+    //#region translating
     const convert = () => {
         const str = input.val().trim();
         console.log(encode.id);
@@ -88,7 +88,7 @@
             ed.div.append($("<a>", {id: "en_detect", "class": "active crypt_detect"})
                 .text("AUTO DETECT").on("click", changeDetect));
         }
-        console.log(ed.list);
+        // console.log(ed.list);
         ed.list.forEach(id => {
             if (id === "detect") return;
             let element = $("<a>", {id: ed.prefix + id, "class": `crypt_${id}`})
@@ -120,9 +120,9 @@
         if (ed === encode) $("#en_detect").css({"color": encode.autoDetect ? "#438dff" : "#666666"});
         localStorage.setItem(`${ed.prefix}list`, JSON.stringify(ed.list));
     };
-    //endregion translating
+    //#endregion translating
 
-    //region event handling
+    //#region event handling
     const clear = () => {
         input.val("");
         output.val("");
@@ -239,9 +239,9 @@
         show(notification);
         $("#msg-content").html(msg);
     };
-    //endregion event handling
+    //#endregion event handling
 
-    //region initialization
+    //#region initialization
     if (w.File && w.FileReader && w.FileList && w.Blob) {
         input.on("dragenter", e => {
             event(e);
@@ -287,5 +287,5 @@
         input.val(params["q"]);
         convert();
     }
-    //endregion initialization
+    //#endregion initialization
 })(document, window, ED());

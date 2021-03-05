@@ -244,3 +244,6 @@ function Core() {
 
     this.encode = (core, input) => core.en(input.trim());
 }
+
+const core = new Core();
+core.uni
